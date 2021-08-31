@@ -1,9 +1,15 @@
 from typing import Optional
 
 from fastapi import FastAPI
+from pydantic.main import BaseModel
+
+
+class PostInputRequest(BaseModel):
+    title: str
+    info: str
+    imageURL: str
 
 app = FastAPI()
-
 
 @app.get("/")
 def read_root():
