@@ -1,7 +1,10 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, LargeBinary, BINARY
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
 from .database import Base
+from . import database
+
 
 class Music(Base):
     __tablename__ = "music"

@@ -4,7 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import logging
 
-
 # 환경 변수로 설정 필요 -> 보안
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/MusicPlayer"
 
@@ -16,3 +15,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
