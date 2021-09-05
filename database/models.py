@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from .database import Base
 from . import database
 from pydantic import BaseModel
+from typing import List, Optional
 
 
 class Music(BaseModel):
