@@ -4,18 +4,27 @@ from fastapi import FastAPI
 from pydantic.main import BaseModel
 
 
-class PostInputRequest(BaseModel):
+app = FastAPI()
+
+postdb = []
+
+
+class Music(BaseModel):
+    id: int
     title: str
     info: str
-    imageURL: str
-
-app = FastAPI()
+    image_link: str
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "Music Player"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/musics")
+def read_musics():
+    return postdb
+
+@app.post("/add_music")
+def add_music(music: Music):
+    postdb.append(music)
+    return postdb[-1]

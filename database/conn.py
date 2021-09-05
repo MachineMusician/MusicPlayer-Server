@@ -1,19 +1,7 @@
-from fastapi import FastAPI, Depends, Path, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-from main import app
-from . import models, database
+engine = create_engine('mysql+pymysql://root:1234@localhost:3306/MusicPlayer')
 
-
-@app.get(path="/api/music/readAll")
-def getAll(
-        db: Session = Depends(database.get_db())):
-    result = db.query(models.Music)
-
-    if result is None:
-        raise HTTPException(status_code=404, detail="조회할 데이터가 없습니다.")
-
-    return {
-        "status": "OK",
-        "data": result
-    }
+db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))

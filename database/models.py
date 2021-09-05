@@ -4,9 +4,10 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from .database import Base
 from . import database
+from pydantic import BaseModel
 
 
-class Music(Base):
+class Music(BaseModel):
     __tablename__ = "music"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
