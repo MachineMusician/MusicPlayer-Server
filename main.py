@@ -7,10 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import wave
 import sys
-from pydub import AudioSegment
 
-
-출처: https://deepinlife.tistory.com/20 [나의 이야기]
 
 app = FastAPI()
 
