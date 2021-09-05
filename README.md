@@ -15,5 +15,9 @@
    uvicorn main:app --reload
    ```
 
-   
 
+
+
+#### docs
+
+execute 후,  http://localhost:8000/docs 접속하여 Swagger 확인
