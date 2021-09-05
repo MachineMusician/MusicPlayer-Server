@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import wave
 import sys
+import pydub
 
 
 app = FastAPI()
@@ -19,7 +20,7 @@ class Music(BaseModel):
     title: str
     info: str
     image_link: str
-    wavFile:
+    wavFile:np.fromfile()
 
 @app.get("/")
 def read_root():
