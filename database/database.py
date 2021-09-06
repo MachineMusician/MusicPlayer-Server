@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 import logging
 
-# 환경 변수로 설정 필요 -> 보안
+# 환경 변수로 설정 필요 
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/MusicPlayer"
 
 engine = create_engine(
