@@ -1,9 +1,10 @@
 from typing import Optional
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Depends
 from pydantic.main import BaseModel
 from dataclasses import dataclass, field
 from typing import List, Optional
+from sqlalchemy.orm import Session
 
 
 import matplotlib.pyplot as plt
@@ -12,13 +13,14 @@ import wave
 import sys
 import pydub
 
+from database.database import get_db
+from database.models import Music
 
 app = FastAPI()
 
-postdb = []
 
 
-class Music(BaseModel):
+class ResponseMusic(BaseModel):
     id: int
     title: str
     info: str
@@ -30,9 +32,10 @@ def read_root():
     return {"Hello": "Music Player"}
 
 
-@app.get("/musics")
-def read_musics():
-    return postdb
+@app.get("/musics", response_model=List[ResponseMusic])
+def read_musics(db: Session = Depends(get_db)):
+    musics = db.query(Music).all()
+    return musics
 
 @app.post("/add_music")
 def add_music(music: Music):
