@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-class Music(BaseModel):
+class Music(Base):
     __tablename__ = "music"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)

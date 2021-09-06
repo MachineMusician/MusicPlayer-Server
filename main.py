@@ -7,17 +7,10 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 
-import matplotlib.pyplot as plt
-import numpy as np
-import wave
-import sys
-import pydub
-
 from database.database import get_db
 from database.models import Music
 
 app = FastAPI()
-
 
 
 class ResponseMusic(BaseModel):
@@ -26,6 +19,13 @@ class ResponseMusic(BaseModel):
     info: str
     image_link: str
     wavFile: Optional[UploadFile]
+
+
+class RequestMusic(BaseModel):
+    id: int
+    title: str
+    info: str
+    image_link: str
 
 @app.get("/")
 def read_root():
@@ -37,7 +37,10 @@ def read_musics(db: Session = Depends(get_db)):
     musics = db.query(Music).all()
     return musics
 
+
 @app.post("/add_music")
-def add_music(music: Music):
-    postdb.append(music)
-    return postdb[-1]
+def add_music(req: RequestMusic, db: Session = Depends(get_db)):
+    music = Music(**req.dict())
+    db.add(music)
+    db.commit()
+    return music
