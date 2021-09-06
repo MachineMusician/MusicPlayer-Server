@@ -2,10 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-from .database import Base
-from . import database
-from pydantic import BaseModel
-from typing import List, Optional
+Base = declarative_base()
 
 
 class Music(Base):

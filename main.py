@@ -20,9 +20,11 @@ class ResponseMusic(BaseModel):
     image_link: str
     wavFile: Optional[UploadFile]
 
+    class Config:
+        orm_mode = True
+
 
 class RequestMusic(BaseModel):
-    id: int
     title: str
     info: str
     image_link: str
