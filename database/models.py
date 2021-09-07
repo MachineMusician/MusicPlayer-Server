@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, LargeBinary, BINARY
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, LargeBinary, BINARY, BLOB
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -12,4 +12,4 @@ class Music(Base):
     title = Column(String, nullable=False)
     info = Column(String, nullable=False)
     image_link = Column(String)
-    wavFile = Column(LargeBinary)
+    wavFile = Column(LargeBinary().with_variant(BLOB, "mysql"))

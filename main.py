@@ -17,7 +17,7 @@ class ResponseMusic(BaseModel):
     title: str
     info: str
     image_link: str
-
+    wavFile: Optional[bytes]
 
     class Config:
         orm_mode = True
