@@ -2,7 +2,6 @@ from typing import Optional
 
 from fastapi import FastAPI, File, UploadFile, Depends
 from pydantic.main import BaseModel
-from dataclasses import dataclass, field
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
@@ -18,7 +17,7 @@ class ResponseMusic(BaseModel):
     title: str
     info: str
     image_link: str
-    wavFile: Optional[UploadFile]
+
 
     class Config:
         orm_mode = True
