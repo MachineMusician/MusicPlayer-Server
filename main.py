@@ -8,9 +8,23 @@ from sqlalchemy.orm import Session
 
 from database.database import get_db
 from database.models import Music
+from fastapi.middleware.cors import CORSMiddleware # adding cors headers
 
 app = FastAPI()
 
+# adding cors urls
+origins = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials= True,
+    allow_methods = ["*"],
+    allow_headers = ["*"]
+)
 
 class ResponseMusic(BaseModel):
     id: int
