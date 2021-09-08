@@ -11,6 +11,6 @@ class Music(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
     title = Column(String, nullable=False)
     info = Column(String, nullable=False)
-    nickname = Column(String)
+    nickname = Column(String, nullable=False)
     image_link = Column(String)
     wavFile = Column(LargeBinary().with_variant(BLOB, "mysql"))
