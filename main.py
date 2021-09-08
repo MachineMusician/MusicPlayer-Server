@@ -30,6 +30,7 @@ class ResponseMusic(BaseModel):
     id: int
     title: str
     info: str
+    nickname: str
     image_link: str
     wavFile: Optional[bytes]
 
@@ -40,6 +41,7 @@ class ResponseMusic(BaseModel):
 class RequestMusic(BaseModel):
     title: str
     info: str
+    nickname: str
     image_link: str
 
 @app.get("/")
