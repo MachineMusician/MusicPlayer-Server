@@ -29,9 +29,10 @@ app.add_middleware(
 class ResponseMusic(BaseModel):
     id: int
     title: str
-    info: str
-    nickname: str
-    image_link: str
+    user_name: str
+    description: str
+    createdAt: str
+    image_link: List[str]
     wavFile: Optional[bytes]
 
     class Config:
@@ -58,6 +59,7 @@ def read_musics(db: Session = Depends(get_db)):
 @app.post("/add_music")
 def add_music(req: RequestMusic, db: Session = Depends(get_db)):
     music = Music(**req.dict())
+    print(music)
     db.add(music)
     db.commit()
     return music
