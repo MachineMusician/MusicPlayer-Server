@@ -20,7 +20,7 @@ class MusifFile(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
     music_file = Column(LargeBinary().with_variant(BLOB, "mysql"), nullable=False)
-    music_id = Column(Integer, nullable=False)
+    music_id = Column(Integer, ForeignKey('music.id'), nullable=False)
 
 
 class ImageFile(Base):
@@ -28,4 +28,4 @@ class ImageFile(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
     image_file = Column(LargeBinary().with_variant(BLOB, "mysql"), nullable=False)
-    music_id = Column(Integer, nullable=False)
+    music_id = Column(Integer, ForeignKey('music.id'), nullable=False)
