@@ -10,14 +10,22 @@ class Music(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
     title = Column(String, nullable=False)
-    info = Column(String, nullable=False)
-    nickname = Column(String, nullable=False)
-    image_link = Column(String)
-    wavFile = Column(LargeBinary().with_variant(BLOB, "mysql"))
+    user_name = Column(String, nullable=False)
+    description = Column(String, nullable=False)
+    createdAt = Column(String, nullable=False)
+
 
 class MusifFile(Base):
     __tablename__ = "musicfile"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
+    music_file = Column(LargeBinary().with_variant(BLOB, "mysql"), nullable=False)
+    music_id = Column(Integer, nullable=False)
+
+
+class ImageFile(Base):
+    __tablename__ = "imagefile"
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
     image_file = Column(LargeBinary().with_variant(BLOB, "mysql"), nullable=False)
-    dashboard_id = Column(Integer, nullable=False)
+    music_id = Column(Integer, nullable=False)
