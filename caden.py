@@ -639,7 +639,7 @@ def merge_boxes(boxes, threshold):
     return filtered_boxes
 
 
-def inference_score(path):
+def inference_score(path, filename: str):
 
     #-------------------------------------------------------------------------------
     # Image Preprocessing (Blurring, Noise Removal, Binarization, Deskewing)
@@ -1233,7 +1233,7 @@ def inference_score(path):
     # binfile = open("output/output.mid", 'wb')
     # midi.writeFile(binfile)
     # binfile.close()
-    binfile = open("output/output.wav", 'wb')
+    binfile = open(f"output/{filename}.mid", 'wb')
     midi.writeFile(binfile)
     binfile.close()
 
