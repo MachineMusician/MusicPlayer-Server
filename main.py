@@ -5,10 +5,9 @@ from pydantic.main import BaseModel
 from typing import List, Optional
 from sqlalchemy.orm import Session
 
-
 from database.database import get_db
 from database.models import Music, MusicFile, ImageFile
-from fastapi.middleware.cors import CORSMiddleware # adding cors headers
+from fastapi.middleware.cors import CORSMiddleware  # adding cors headers
 
 from caden import inference_score
 
@@ -23,10 +22,11 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials= True,
-    allow_methods = ["*"],
-    allow_headers = ["*"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
+
 
 class ResponseMusic(BaseModel):
     id: int
@@ -48,6 +48,7 @@ class RequestMusic(BaseModel):
     created_at: str
     image_list: List[str]
     music_list: List[str]
+
 
 @app.get("/")
 def read_root():
@@ -77,3 +78,5 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
         db.add(MusicFile(music_file=music, music_file_id=image_id))
 
     db.commit()
+
+    return req
