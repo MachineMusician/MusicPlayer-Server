@@ -27,8 +27,12 @@ class MusicFile(Base):
     __tablename__ = "musicfile"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
-    music_file = Column(LargeBinary().with_variant(BLOB, "mysql"), nullable=False)
-    music_id = Column(Integer, nullable=False)
+    music_file = Column(String, nullable=False)
+    music_file_id = Column(Integer, nullable=False)
+
+    def __init__(self, music_file: str, music_file_id: int):
+        self.music_file = music_file
+        self.music_file_id = music_file_id
 
 
 class ImageFile(Base):
