@@ -10,8 +10,10 @@ from database.database import get_db
 from database.models import Music, MusicFile, ImageFile
 from fastapi.middleware.cors import CORSMiddleware # adding cors headers
 
-app = FastAPI()
+from caden import inference_score
 
+app = FastAPI()
+inference_score("resources/samples/mary.jpg")  # img path
 # adding cors urls
 origins = [
     "http://127.0.0.1:3000",
