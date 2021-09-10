@@ -1237,7 +1237,7 @@ def inference_score(path):
     midi.writeFile(binfile)
     binfile.close()
 
-inference_score()
+
 
 
 

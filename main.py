@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware # adding cors headers
 from caden import inference_score
 
 app = FastAPI()
-inference_score("resources/samples/mary.jpg")  # img path
+# inference_score("resources/samples/mary.jpg")  # img path
 # adding cors urls
 origins = [
     "http://127.0.0.1:3000",
@@ -69,12 +69,10 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at)
     music_file = req.image_list
     db.add(music)
+    db.commit()
 
     image_id = db.query(Music).order_by(Music.id.desc()).first().id
 
     for value in music_file:
         db.add(ImageFile(image_file=value, music_image_id=image_id))
-
-
     db.commit()
-    return music
