@@ -35,7 +35,7 @@ class ResponseMusic(BaseModel):
     description: str
     created_at: str
     image_list: List[str]
-    # wavFile: List[str]
+    music_list: List[str]
 
     class Config:
         orm_mode = True
@@ -47,6 +47,7 @@ class RequestMusic(BaseModel):
     description: str
     created_at: str
     image_list: List[str]
+    music_list: List[str]
 
 @app.get("/")
 def read_root():
@@ -61,18 +62,18 @@ def read_musics(db: Session = Depends(get_db)):
 
 @app.post("/add_music")
 def add_music(req: RequestMusic, db: Session = Depends(get_db)):
-    # title = req.title
-    # print(**req.dict())
-    # print("=====")
-    # dict = {'title': req.title, 'user_name': req.user_name, 'description': req.description, 'createdAt': req.createdAt}
-
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at)
-    music_file = req.image_list
+    image_list = req.image_list
+    music_list = req.music_list
     db.add(music)
     db.commit()
 
     image_id = db.query(Music).order_by(Music.id.desc()).first().id
 
-    for value in music_file:
-        db.add(ImageFile(image_file=value, music_image_id=image_id))
+    for image in image_list:
+        db.add(ImageFile(image_file=image, music_image_id=image_id))
+
+    for music in music_list:
+        db.add(MusicFile(music_file=music, music_file_id=image_id))
+
     db.commit()
