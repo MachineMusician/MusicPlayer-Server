@@ -30,21 +30,13 @@ app.add_middleware(
 
 
 class ResponseMusic(BaseModel):
+    id: int
     title: str
     user_name: str
     description: str
     created_at: str
-    image_files: List[str]
-    music_files: List[str]
-
-    def __init__(self, title: str, user_name: str, description: str, created_at: str, image_files: List[str],
-                 music_files: List[str]):
-        self.title = title
-        self.user_name = user_name
-        self.description = description
-        self.created_at = created_at
-        self.image_files = image_files
-        self.music_files = music_files
+    image_files: str
+    music_files: str
 
     class Config:
         orm_mode = True
@@ -65,9 +57,9 @@ def read_root():
 
 @app.get("/musics", response_model=List[ResponseMusic])
 def read_musics(db: Session = Depends(get_db)):
+    print(db.query(Music).first().created_at)
     musics = db.query(Music).all()
     print(musics)
-
     return musics
 
 
@@ -78,15 +70,18 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
 
     return_image_list = ""
     return_file_list = ""
+    i = 1
     for image in image_list:
         data = image.replace(' ', '+')
         image_data = base64.b64decode(data)
-        filename = f"input/{req.created_at}" + f"{req.title}.png"
+        filename = f"input/{req.created_at}{i}" + f"{req.title}.png"
+
         with open(filename, 'wb') as fh:
             fh.write(image_data)
-        inference_score(f"input/{req.created_at}" + f"{req.title}.png", f"{req.created_at}" + f"{req.title}")
-        return_image_list += filename + ","
-        return_file_list += f"input/{req.created_at}" + f"{req.title}.mid" + ","
+        inference_score(f"input/{req.created_at}{i}" + f"{req.title}.png", f"{req.created_at}" + f"{i}" + f"{req.title}")
+        return_image_list += image_data + ","
+        return_file_list += f"input/{req.created_at}{i}" + f"{req.title}.mid" + ","
+        i += 1
 
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
                   image_files=return_image_list, music_files=return_file_list)
