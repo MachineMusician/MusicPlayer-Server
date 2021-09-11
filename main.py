@@ -6,7 +6,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from database.database import get_db
-from database.models import Music, MusicFile, ImageFile
+from database.models import Music
 from fastapi.middleware.cors import CORSMiddleware  # adding cors headers
 import base64
 
@@ -30,13 +30,21 @@ app.add_middleware(
 
 
 class ResponseMusic(BaseModel):
-    id: int
     title: str
     user_name: str
     description: str
     created_at: str
-    image_list: List[str]
-    music_list: List[str]
+    image_files: List[str]
+    music_files: List[str]
+
+    def __init__(self, title: str, user_name: str, description: str, created_at: str, image_files: List[str],
+                 music_files: List[str]):
+        self.title = title
+        self.user_name = user_name
+        self.description = description
+        self.created_at = created_at
+        self.image_files = image_files
+        self.music_files = music_files
 
     class Config:
         orm_mode = True
@@ -47,7 +55,7 @@ class RequestMusic(BaseModel):
     user_name: str
     description: str
     created_at: str
-    image_list: List[str]
+    image_files: List[str]
 
 
 @app.get("/")
@@ -58,30 +66,38 @@ def read_root():
 @app.get("/musics", response_model=List[ResponseMusic])
 def read_musics(db: Session = Depends(get_db)):
     musics = db.query(Music).all()
+    print(musics)
+
     return musics
 
 
 @app.post("/add_music")
 def add_music(req: RequestMusic, db: Session = Depends(get_db)):
-    music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at)
-    image_list = req.image_list
+    image_list = req.image_files
     # music_list = req.music_list
-    db.add(music)
-    db.commit()
 
-    image_id = db.query(Music).order_by(Music.id.desc()).first().id
 
+    i = 1
+    return_image_list = ""
+    return_file_list = ""
     for image in image_list:
         data = image.replace(' ', '+')
         image_data = base64.b64decode(data)
-        filename = f"input/{image_id}" + f"{req.title}.png"
+        filename = f"input/{req.created_at}" + f"{req.title}.png"
         with open(filename, 'wb') as fh:
             fh.write(image_data)
-        db.add(ImageFile(image_file=image, music_image_id=image_id))
+        inference_score(f"input/{req.created_at}" + f"{req.title}.png", f"{req.created_at}" + f"{req.title}")
+        return_image_list += filename + ","
+        return_file_list += f"input/{req.created_at}" + f"{req.title}.mid" + ","
+        i += 1
 
-    print(f"input/{image_id}" + f"{req.title}")
+    music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
+                  image_files=return_image_list, music_files=return_file_list)
+    db.add(music)
+    db.commit()
 
-    inference_score("resources/samples/mary.jpg", f"{image_id}" + f"{req.title}")
+    # db.add(ImageFile(image_file=filename, music_image_id=image_id))
+
     # for music in music_list:
     #     db.add(MusicFile(music_file=music, music_file_id=image_id))
 
