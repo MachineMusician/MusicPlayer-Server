@@ -76,8 +76,6 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
     image_list = req.image_files
     # music_list = req.music_list
 
-
-    i = 1
     return_image_list = ""
     return_file_list = ""
     for image in image_list:
@@ -89,7 +87,6 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
         inference_score(f"input/{req.created_at}" + f"{req.title}.png", f"{req.created_at}" + f"{req.title}")
         return_image_list += filename + ","
         return_file_list += f"input/{req.created_at}" + f"{req.title}.mid" + ","
-        i += 1
 
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
                   image_files=return_image_list, music_files=return_file_list)

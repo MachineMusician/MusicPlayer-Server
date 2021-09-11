@@ -27,26 +27,3 @@ class Music(Base):
         self.music_files = music_files
 
 
-# class MusicFile(Base):
-#     __tablename__ = "musicfile"
-#
-#     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
-#     music_file = Column(String, nullable=False)
-#     music_file_id = Column(Integer, nullable=False)
-#
-#     def __init__(self, music_file: str, music_file_id: int):
-#         self.music_file = music_file
-#         self.music_file_id = music_file_id
-#
-#
-# class ImageFile(Base):
-#     __tablename__ = "imagefile"
-#
-#     id = Column(Integer, primary_key=True, index=True, autoincrement=True, nullable=False)
-#     image_file = Column(String, nullable=False)
-#     music_image_id = Column(Integer)
-#
-#     def __init__(self, image_file: str, music_image_id: int):
-#         self.image_file = image_file
-#         self.music_image_id = music_image_id
-
