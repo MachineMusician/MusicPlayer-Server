@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware  # adding cors headers
 import base64
 
 from caden import inference_score
+from PIL import Image
 
 app = FastAPI()
 # inference_score("resources/samples/mary.jpg")  # img path
@@ -50,9 +51,26 @@ class RequestMusic(BaseModel):
     image_files: List[str]
 
 
+class RequestTest(BaseModel):
+    test_image: str
+
+
 @app.get("/")
 def read_root():
+
     return {"Hello": "Music Player"}
+
+
+@app.post("/test_img")
+def test_image(req: RequestTest):
+    data = req.test_image.replace(' ', '+')
+    image_data = base64.b64decode(data)
+    filename = "input/test.png"
+
+    with open(filename, 'wb') as fh:
+        fh.write(image_data)
+    inference_score(f"input/test.png", "test")
+    return "/output/test.mid"
 
 
 @app.get("/musics", response_model=List[ResponseMusic])
@@ -78,9 +96,10 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
 
         with open(filename, 'wb') as fh:
             fh.write(image_data)
-        inference_score(f"input/{req.created_at}{i}" + f"{req.title}.png", f"{req.created_at}" + f"{i}" + f"{req.title}")
-        return_image_list += image_data + ","
-        return_file_list += f"input/{req.created_at}{i}" + f"{req.title}.mid" + ","
+        inference_score(f"input/{req.created_at}{i}" + f"{req.title}.png",
+                        f"{req.created_at}" + f"{i}" + f"{req.title}")
+        return_image_list += filename + ","
+        return_file_list += f"output/{req.created_at}{i}" + f"{req.title}.mid" + ","
         i += 1
 
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
