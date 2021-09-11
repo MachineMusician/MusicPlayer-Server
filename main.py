@@ -1,9 +1,11 @@
+import os
 from typing import Optional
 
 from fastapi import FastAPI, File, UploadFile, Depends
 from pydantic.main import BaseModel
 from typing import List, Optional
 from sqlalchemy.orm import Session
+from starlette.responses import FileResponse
 
 from database.database import get_db
 from database.models import Music
@@ -28,6 +30,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+
+BASE_DIR = os.getcwd()
+SOUND_DIR = os.path.join(BASE_DIR, 'output')
+IMG_DIR = os.path.join(BASE_DIR, 'input')
 
 
 class ResponseMusic(BaseModel):
@@ -57,7 +63,6 @@ class RequestTest(BaseModel):
 
 @app.get("/")
 def read_root():
-
     return {"Hello": "Music Player"}
 
 
@@ -70,7 +75,7 @@ def test_image(req: RequestTest):
     with open(filename, 'wb') as fh:
         fh.write(image_data)
     inference_score(f"input/test.png", "test")
-    return "/output/test.mid"
+    return f"{SOUND_DIR}/test.mid"
 
 
 @app.get("/musics", response_model=List[ResponseMusic])
@@ -98,8 +103,8 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
             fh.write(image_data)
         inference_score(f"input/{req.created_at}{i}" + f"{req.title}.png",
                         f"{req.created_at}" + f"{i}" + f"{req.title}")
-        return_image_list += filename + ","
-        return_file_list += f"output/{req.created_at}{i}" + f"{req.title}.mid" + ","
+        return_image_list += f"{IMG_DIR}/{filename}" + ","
+        return_file_list += f"{SOUND_DIR}/{req.created_at}{i}" + f"{req.title}.mid" + ","
         i += 1
 
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
