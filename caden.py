@@ -1233,7 +1233,7 @@ def inference_score(path, filename: str):
     # binfile = open("output/output.mid", 'wb')
     # midi.writeFile(binfile)
     # binfile.close()
-    binfile = open(f"output/{filename}.mid", 'wb')
+    binfile = open(f"music-player/public/output/{filename}.mid", 'wb')
     midi.writeFile(binfile)
     binfile.close()
 
