@@ -69,12 +69,13 @@ def read_root():
 @app.post("/test_img")
 def test_image(req: RequestTest):
     data = req.test_image.replace(' ', '+')
+    data = data.replace('.', '=')
     image_data = base64.b64decode(data)
     filename = "input/test.png"
 
     with open(filename, 'wb') as fh:
         fh.write(image_data)
-    inference_score(f"input/test.png", "test")
+    inference_score(f"{IMG_DIR}/test.png", "test")
     return f"{SOUND_DIR}/test.mid"
 
 

@@ -21,7 +21,3 @@
 #### docs
 
 execute 후,  http://localhost:8000/docs 접속하여 Swagger 확인
-
-
-
-- 이미지 Base64 Decoding -> input 
