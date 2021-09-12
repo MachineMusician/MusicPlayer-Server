@@ -70,13 +70,13 @@ def read_root():
 def test_image(req: RequestTest):
     data = req.test_image.replace(' ', '+')
     data = data.replace('.', '=')
-    image_data = base64.b64decode(data)
-    filename = "input/test.png"
+    image_data = base64.urlsafe_b64decode(data + "===")
+    filename = "music-player/public/input/test.png"
 
     with open(filename, 'wb') as fh:
         fh.write(image_data)
-    inference_score(f"{IMG_DIR}/test.png", "test")
-    return f"{SOUND_DIR}/test.mid"
+    inference_score(f"music-player/public/input/test.png", "test")
+    return f"music-player/public/output/test.mid"
 
 
 @app.get("/musics", response_model=List[ResponseMusic])
@@ -98,14 +98,14 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
     for image in image_list:
         data = image.replace(' ', '+')
         image_data = base64.b64decode(data)
-        filename = f"input/{req.created_at}{i}" + f"{req.title}.png"
+        filename = f"music-player/public/input/{req.created_at}{i}" + f"{req.title}.png"
 
         with open(filename, 'wb') as fh:
             fh.write(image_data)
-        inference_score(f"input/{req.created_at}{i}" + f"{req.title}.png",
+        inference_score(f"music-player/public/input/{req.created_at}{i}" + f"{req.title}.png",
                         f"{req.created_at}" + f"{i}" + f"{req.title}")
-        return_image_list += f"{IMG_DIR}/{filename}" + ","
-        return_file_list += f"{SOUND_DIR}/{req.created_at}{i}" + f"{req.title}.mid" + ","
+        return_image_list += f"music-player/public/input/{filename}" + ","
+        return_file_list += f"music-player/public/output/{req.created_at}{i}" + f"{req.title}.mid" + ","
         i += 1
 
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
