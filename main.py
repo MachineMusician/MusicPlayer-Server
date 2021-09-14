@@ -76,7 +76,7 @@ def test_image(req: RequestTest):
     with open(filename, 'wb') as fh:
         fh.write(image_data)
     inference_score(f"music-player/public/input/test.png", "test")
-    return f"music-player/public/output/test.mid"
+    return f"music-player/public/output/test.wav"
 
 
 @app.get("/musics", response_model=List[ResponseMusic])
@@ -105,7 +105,7 @@ def add_music(req: RequestMusic, db: Session = Depends(get_db)):
         inference_score(f"music-player/public/input/{req.created_at}{i}" + f"{req.title}.png",
                         f"{req.created_at}" + f"{i}" + f"{req.title}")
         return_image_list += f"music-player/public/input/{filename}" + ","
-        return_file_list += f"music-player/public/output/{req.created_at}{i}" + f"{req.title}.mid" + ","
+        return_file_list += f"music-player/public/output/{req.created_at}{i}" + f"{req.title}.wav" + ","
         i += 1
 
     music = Music(title=req.title, user_name=req.user_name, description=req.description, created_at=req.created_at,
